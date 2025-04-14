@@ -1,0 +1,172 @@
+/* Custom Styles for Banking System */
+
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --info-color: #0dcaf0;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-top: 60px;
+    background-color: var(--light-color);
+}
+
+/* Navbar Styling */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+/* Card Styling */
+.card {
+    border-radius: 0.5rem;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,.1);
+    border: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,.1);
+}
+
+.card-header {
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+    background-color: var(--light-color);
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    font-weight: 600;
+}
+
+.card-header.bg-primary {
+    color: white;
+}
+
+/* Dashboard Stats */
+.stats-card {
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border-left: 4px solid var(--primary-color);
+}
+
+.stats-card .stats-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.stats-card .stats-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.stats-card .stats-title {
+    font-size: 1rem;
+    color: var(--secondary-color);
+}
+
+/* Transaction List */
+.transaction-item {
+    border-left: 3px solid var(--primary-color);
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    background-color: white;
+    border-radius: 0 0.25rem 0.25rem 0;
+    transition: all 0.3s;
+}
+
+.transaction-item:hover {
+    transform: translateX(5px);
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+.transaction-item.deposit {
+    border-left-color: var(--success-color);
+}
+
+.transaction-item.withdrawal {
+    border-left-color: var(--danger-color);
+}
+
+.transaction-item.transfer-in {
+    border-left-color: var(--info-color);
+}
+
+.transaction-item.transfer-out {
+    border-left-color: var(--warning-color);
+}
+
+/* Forms */
+.form-group label {
+    font-weight: 500;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Buttons */
+.btn {
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+/* Footer */
+.footer {
+    margin-top: 40px;
+    padding: 20px 0;
+    background-color: var(--dark-color);
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    body {
+        padding-top: 56px;
+    }
+    
+    .stats-card {
+        margin-bottom: 1rem;
+    }
+    
+    .card-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* Animation */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+} 

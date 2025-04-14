@@ -1,0 +1,124 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Transaction Details - Banking System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-exchange-alt me-2"></i>Transaction Details
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-12 text-center">
+                            {% if transaction.transaction_type == 'Deposit' %}
+                            <div class="display-1 text-success">
+                                <i class="fas fa-arrow-down-long"></i>
+                            </div>
+                            <h3 class="text-success mb-3">Deposit</h3>
+                            {% elif transaction.transaction_type == 'Withdrawal' %}
+                            <div class="display-1 text-danger">
+                                <i class="fas fa-arrow-up-long"></i>
+                            </div>
+                            <h3 class="text-danger mb-3">Withdrawal</h3>
+                            {% elif transaction.transaction_type == 'Transfer' %}
+                            <div class="display-1 text-primary">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <h3 class="text-primary mb-3">Transfer</h3>
+                            {% elif transaction.transaction_type == 'Interest' %}
+                            <div class="display-1 text-info">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <h3 class="text-info mb-3">Interest</h3>
+                            {% endif %}
+                            
+                            <h2 class="mb-3">₹{{ transaction.amount }}</h2>
+                            
+                            {% if transaction.status == 'Completed' %}
+                            <div class="badge bg-success fs-6 mb-3">Completed</div>
+                            {% elif transaction.status == 'Pending' %}
+                            <div class="badge bg-warning text-dark fs-6 mb-3">Pending</div>
+                            {% elif transaction.status == 'Failed' %}
+                            <div class="badge bg-danger fs-6 mb-3">Failed</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th class="bg-light" style="width: 40%">Transaction ID</th>
+                                        <td>{{ transaction.id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light">Account Number</th>
+                                        <td>{{ transaction.account.account_no }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light">Account Holder</th>
+                                        <td>{{ transaction.account.name }}</td>
+                                    </tr>
+                                    {% if transaction.transaction_type == 'Transfer' and transaction.to_account %}
+                                    <tr>
+                                        <th class="bg-light">To Account</th>
+                                        <td>{{ transaction.to_account.account_no }}</td>
+                                    </tr>
+                                    {% endif %}
+                                    <tr>
+                                        <th class="bg-light">Date & Time</th>
+                                        <td>{{ transaction.timestamp|date:"F d, Y H:i:s" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light">Description</th>
+                                        <td>{{ transaction.description }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    {% if request.user.is_admin and transaction.status == 'Pending' %}
+                    <div class="row mb-3">
+                        <div class="col">
+                            <div class="d-flex gap-2">
+                                <form method="post" action="{% url 'approve_transaction' transaction.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-check me-2"></i>Approve Transaction
+                                    </button>
+                                </form>
+                                <form method="post" action="{% url 'reject_transaction' transaction.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-times me-2"></i>Reject Transaction
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="text-center mt-4">
+                        {% if request.user.is_admin %}
+                        <a href="{% url 'admin_transactions' %}" class="btn btn-primary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Transactions
+                        </a>
+                        {% else %}
+                        <a href="{% url 'transaction_history' %}" class="btn btn-primary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Transaction History
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

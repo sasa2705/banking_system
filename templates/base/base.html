@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Banking System{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            padding-top: 60px;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            border: none;
+        }
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid rgba(0,0,0,.125);
+            font-weight: 600;
+        }
+        .bg-banking {
+            background-color: #007bff;
+        }
+        .btn-banking {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-banking:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+        .footer {
+            margin-top: 40px;
+            padding: 20px 0;
+            background-color: #343a40;
+            color: white;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'dashboard' %}">
+                <i class="fas fa-university me-2"></i>Banking System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                {% if user.is_authenticated %}
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    
+                    {% if user.is_admin %}
+                    <!-- Admin Navigation -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="accountsDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Accounts
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="accountsDropdown">
+                            <li><a class="dropdown-item" href="{% url 'create_account' %}">Create Account</a></li>
+                            <li><a class="dropdown-item" href="{% url 'account_lookup' %}">Account Lookup</a></li>
+                            <li><a class="dropdown-item" href="{% url 'admin_accounts' %}">All Accounts</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="transactionsDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Transactions
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="transactionsDropdown">
+                            <li><a class="dropdown-item" href="{% url 'deposit' %}">Deposit</a></li>
+                            <li><a class="dropdown-item" href="{% url 'withdraw' %}">Withdraw</a></li>
+                            <li><a class="dropdown-item" href="{% url 'transfer' %}">Transfer</a></li>
+                            <li><a class="dropdown-item" href="{% url 'transaction_history' %}">Transaction History</a></li>
+                            <li><a class="dropdown-item" href="{% url 'admin_transactions' %}">All Transactions</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <!-- User Navigation -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_detail' %}">My Account</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="transactionsDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Transactions
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="transactionsDropdown">
+                            <li><a class="dropdown-item" href="{% url 'deposit' %}">Deposit</a></li>
+                            <li><a class="dropdown-item" href="{% url 'withdraw' %}">Withdraw</a></li>
+                            <li><a class="dropdown-item" href="{% url 'transfer' %}">Transfer</a></li>
+                            <li><a class="dropdown-item" href="{% url 'transaction_history' %}">Transaction History</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-1"></i>{{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                {% else %}
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Messages -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <!-- Content Block -->
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto py-3 bg-dark">
+        <div class="container text-center">
+            <span class="text-light">&copy; 2025 Banking System. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Optional: jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 
